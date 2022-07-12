@@ -9,7 +9,7 @@ class Search extends React.Component {
     this.state = {
       artist: '',
       disable: true,
-      artistName: '',
+      artistNameSearch: '',
       fetchAlbums: [],
     };
   }
@@ -33,14 +33,14 @@ class Search extends React.Component {
     const { artist } = this.state;
     const artistsList = await searchAlbumsAPI(artist);
     this.setState({
-      artistName: artist,
+      artistNameSearch: artist,
       artist: '',
       fetchAlbums: artistsList,
     });
   }
 
   render() {
-    const { artist, disable, fetchAlbums, artistName } = this.state;
+    const { artist, disable, fetchAlbums, artistNameSearch } = this.state;
     return (
       <div data-testid="page-search">
         <Header />
@@ -64,18 +64,23 @@ class Search extends React.Component {
         {
           fetchAlbums.length > 0 ? (
             <div>
-              <h2>{ `Resultado de álbuns de: ${artistName}` }</h2>
+              <h2>{ `Resultado de álbuns de: ${artistNameSearch}` }</h2>
               {
                 fetchAlbums.map((album) => {
-                  const { collectionName, artworkUrl100, collectionId } = album;
+                  const { collectionName, artworkUrl100, collectionId,
+                    artistName } = album;
                   return (
                     <div key={ collectionId }>
-                      <h4>{ collectionName }</h4>
+                      <h2>{ collectionName }</h2>
+                      <h4>{ artistName }</h4>
                       <img src={ artworkUrl100 } alt="Capa do Album" />
+                      <br />
                       <Link
                         data-testid={ `link-to-album-${collectionId}` }
                         to={ `/album/${collectionId}` }
-                      />
+                      >
+                        Músicas
+                      </Link>
                     </div>
                   );
                 })
